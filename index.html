@@ -14,8 +14,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100%;
-            margin-top: 6%;
+            min-height: 100vh;
             text-align: center;
         }
         #container {
@@ -46,10 +45,10 @@
             border-radius: 10px;
         }
         .question:nth-child(odd) {
-            background-color: #e9f7ef; /* Light green shade */
+            background-color: #e9f7ef;
         }
         .question:nth-child(even) {
-            background-color: #f0f8ff; /* Light blue shade */
+            background-color: #f0f8ff;
         }
         button {
             cursor: pointer;
@@ -93,74 +92,24 @@
         <button id="start-btn">Start Quiz</button>
     </div>
 
-    <div id="quiz" class="hidden"></div>
+    <div id="quiz" class="hidden" role="region" aria-label="Quiz Section"></div>
     <button id="submit-btn" class="hidden">Submit</button>
-    <div id="result" class="hidden"></div>
-    <div id="player-data" class="hidden"></div>
+    <div id="result" class="hidden" role="region" aria-label="Result Section"></div>
+    <div id="player-data" class="hidden" role="region" aria-label="Player Data Section"></div>
 </div>
 
 <script>
 const questions = [
-    {
-        id: 1,
-        question: "Is Khadija more of an introvert or extrovert?",
-        options: ["Introvert", "Extrovert"],
-        answer: "Introvert"
-    },
-    {
-        id: 2,
-        question: "How would you describe Khadija's character?",
-        options: ["Selfish", "Helpful"],
-        answer: "Helpful"
-    },
-    {
-        id: 3,
-        question: "What kind of activities does Khadija prefer to do in her free time?",
-        options: ["Editing", "Watching Movies"],
-        answer: "Editing"
-    },
-    {
-        id: 4,
-        question: "Is Khadija more likely to help a friend in need or prioritize her own tasks?",
-        options: ["Help a friend", "Prioritize her tasks"],
-        answer: "Help a friend"
-    },
-    {
-        id: 5,
-        question: "How does Khadija react in stressful situations?",
-        options: ["Stays calm", "Gets anxious"],
-        answer: "Stays calm"
-    },
-    {
-        id: 6,
-        question: "What is Khadija's dream job?",
-        options: ["Software Developer", "Graphic Designer", "Data Scientist", "Project Manager"],
-        answer: "Graphic Designer"
-    },
-    {
-        id: 7,
-        question: "What do you think about Khadija?",
-        options: [],
-        answer: "input"
-    },
-    {
-        id: 8,
-        question: "How does Khadija usually respond to compliments?",
-        options: ["Graciously accepts", "Feels shy"],
-        answer: "Graciously accepts"
-    },
-    {
-        id: 9,
-        question: "Explain Khadija in a single word?",
-        options: [],
-        answer: "input"
-    },
-    {
-        id: 10,
-        question: "What is Khadija's favorite way to spend her weekend?",
-        options: ["Watching Drama", "Sleeping"],
-        answer: "Watching Drama"
-    }
+    { id: 1, question: "Is Khadija more of an introvert or extrovert?", options: ["Introvert", "Extrovert"], answer: "Introvert" },
+    { id: 2, question: "How would you describe Khadija's character?", options: ["Selfish", "Helpful"], answer: "Helpful" },
+    { id: 3, question: "What kind of activities does Khadija prefer to do in her free time?", options: ["Editing", "Watching Movies"], answer: "Editing" },
+    { id: 4, question: "Is Khadija more likely to help a friend in need or prioritize her own tasks?", options: ["Help a friend", "Prioritize her tasks"], answer: "Help a friend" },
+    { id: 5, question: "How does Khadija react in stressful situations?", options: ["Stays calm", "Gets anxious"], answer: "Stays calm" },
+    { id: 6, question: "What is Khadija's dream job?", options: ["Software Developer", "Graphic Designer", "Data Scientist", "Project Manager"], answer: "Graphic Designer" },
+    { id: 7, question: "What do you think about Khadija?", options: [], answer: "input" },
+    { id: 8, question: "How does Khadija usually respond to compliments?", options: ["Graciously accepts", "Feels shy"], answer: "Graciously accepts" },
+    { id: 9, question: "Explain Khadija in a single word?", options: [], answer: "input" },
+    { id: 10, question: "What is Khadija's favorite way to spend her weekend?", options: ["Watching Drama", "Sleeping"], answer: "Watching Drama" }
 ];
 
 const quizContainer = document.getElementById('quiz');
@@ -173,6 +122,7 @@ const nameInput = document.getElementById('name');
 let players = []; 
 
 function loadQuiz() {
+    quizContainer.innerHTML = ''; // Clear previous questions if any
     questions.forEach((question) => {
         const questionDiv = document.createElement('div');
         questionDiv.classList.add('question');
@@ -218,9 +168,9 @@ function calculateScore() {
 
     questions.forEach((question) => {
         if (question.id === 7 || question.id === 9) {
-            const selectedInput = document.querySelector(`input[name="question-${question.id}"]`).value.trim();
-            if (selectedInput.length > 0) {
-                score += 1; t
+            const selectedInput = document.querySelector(`input[name="question-${question.id}"]`);
+            if (selectedInput && selectedInput.value.trim().length > 0) {
+                score += 1;
             }
         } else {
             const selectedOption = document.querySelector(`input[name="question-${question.id}"]:checked`);
@@ -250,7 +200,7 @@ function displayPlayerData() {
 startBtn.onclick = () => {
     if (nameInput.value.trim() === '') {
         alert('Please enter your name.');
-        return
+        return;
     }
 
     startBtn.classList.add('hidden'); 
@@ -260,7 +210,6 @@ startBtn.onclick = () => {
 submitBtn.onclick = () => {
     const score = calculateScore();
     const playerName = nameInput.value;
-
     
     players.push({ name: playerName, score: score });
 
